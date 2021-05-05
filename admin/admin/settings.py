@@ -119,3 +119,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATICFILES_DIRS=[
+    os.path.join(BASE_DIR,'polls','static')
+] #static 파일들이 어디에 있는지를 쓰는곳
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+STATIC_ROOT= os.path.join(BASE_DIR,'static')
+#static 파일들이 어디로 모일 것인지를 쓰는 곳

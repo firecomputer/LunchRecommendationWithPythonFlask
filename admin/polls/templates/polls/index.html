@@ -1,121 +1,91 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" width="100%">
 
-<head>
-    <meta charset="UTF-8">
-    <title>마이크 테스트</title>
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>gajam - 가장 위대한 유니티 유튜버</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+    </head>
 
-<body>
-    <input type=checkbox id="chk-hear-mic"><label for="chk-hear-mic">마이크 소리 듣기</label>
-    <button id="record">녹음</button>
-    <button id="stop">정지</button>
-    <div id="sound-clips"></div>
-    <script>
-        const record = document.getElementById("record")
-        const stop = document.getElementById("stop")
-        const soundClips = document.getElementById("sound-clips")
-        const chkHearMic = document.getElementById("chk-hear-mic")
-
-        const audioCtx = new(window.AudioContext || window.webkitAudioContext)() // 오디오 컨텍스트 정의
-
-        const analyser = audioCtx.createAnalyser()
-        //        const distortion = audioCtx.createWaveShaper()
-        //        const gainNode = audioCtx.createGain()
-        //        const biquadFilter = audioCtx.createBiquadFilter()
-
-        function makeSound(stream) {
-            const source = audioCtx.createMediaStreamSource(stream)
-
-            source.connect(analyser)
-            //            analyser.connect(distortion)
-            //            distortion.connect(biquadFilter)
-            //            biquadFilter.connect(gainNode)
-            //            gainNode.connect(audioCtx.destination) // connecting the different audio graph nodes together
-            analyser.connect(audioCtx.destination)
-
-        }
-
-        if (navigator.mediaDevices) {
-            console.log('getUserMedia supported.')
-
-            const constraints = {
-                audio: true
+    <body height="100%">
+        <style>
+            #main {
+                margin: 0px;
+                padding: 0px;
             }
-            let chunks = []
-
-            navigator.mediaDevices.getUserMedia(constraints)
-                .then(stream => {
-
-                    const mediaRecorder = new MediaRecorder(stream)
-                    
-                    chkHearMic.onchange = e => {
-                        if(e.target.checked == true) {
-                            audioCtx.resume()
-                            makeSound(stream)
-                        } else {
-                            audioCtx.suspend()
-                        }
-                    }
-                    
-                    record.onclick = () => {
-                        mediaRecorder.start()
-                        console.log(mediaRecorder.state)
-                        console.log("recorder started")
-                        record.style.background = "red"
-                        record.style.color = "black"
-                    }
-
-                    stop.onclick = () => {
-                        mediaRecorder.stop()
-                        console.log(mediaRecorder.state)
-                        console.log("recorder stopped")
-                        record.style.background = ""
-                        record.style.color = ""
-                    }
-
-                    mediaRecorder.onstop = e => {
-                        console.log("data available after MediaRecorder.stop() called.")
-
-                        const clipName = prompt("오디오 파일 제목을 입력하세요.", new Date())
-
-                        const clipContainer = document.createElement('article')
-                        const clipLabel = document.createElement('p')
-                        const audio = document.createElement('audio')
-                        const deleteButton = document.createElement('button')
-
-                        clipContainer.classList.add('clip')
-                        audio.setAttribute('controls', '')
-                        deleteButton.innerHTML = "삭제"
-                        clipLabel.innerHTML = clipName
-
-                        clipContainer.appendChild(audio)
-                        clipContainer.appendChild(clipLabel)
-                        clipContainer.appendChild(deleteButton)
-                        soundClips.appendChild(clipContainer)
-
-                        audio.controls = true
-                        const blob = new Blob(chunks, {
-                            'type': 'audio/ogg codecs=opus'
-                        })
-                        chunks = []
-                        const audioURL = URL.createObjectURL(blob)
-                        audio.src = audioURL
-                        console.log("recorder stopped")
-
-                        deleteButton.onclick = e => {
-                            evtTgt = e.target
-                            evtTgt.parentNode.parentNode.removeChild(evtTgt.parentNode)
-                        }
-                    }
-
-                    mediaRecorder.ondataavailable = e => {
-                        chunks.push(e.data)
-                    }
-                })
-                .catch(err => {
-                    console.log('The following error occurred: ' + err)
-                })
-        }
-    </script>
-</body></html>
+            .background {
+                width:1536px;
+            }
+            @media (max-width:900px) {
+                .background {
+                    width:1200px;
+                }
+            }
+            @media (max-width:500px) {
+                .background {
+                    width:900px;
+                }
+            }
+            .backgroundoverflow {
+                overflow: hidden;
+                display: flex;
+                width: 100%;
+                height:1200px;
+            }
+            @font-face { 
+                font-family: 'godic'; 
+                src: url(/static/img/SuncheonB.ttf) format('truetype'); 
+            }
+        </style>
+        <nav class="navbar navbar-expand-lg navbar-light bg-white">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="index.byeongsinscript">GAJAM</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="index.byeongsinscript">Home</a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link" href="about.byeongsinscript">Videos</a>
+                    </li>
+                </ul>
+                <form class="d-flex">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+                </div>
+            </div>
+        </nav> 
+        <div style="position: relative;font-family: godic;" class="backgroundoverflow">
+            <img class="background" style="position: absolute;" src="/static/img/verysmart2.jpg" alt="배경화면">
+            <main class="container full-y" id="main">
+                <div style="position: relative;padding-left:8%;padding-top: 12%;text-shadow: 5px 5px 5px black;color:white;">
+                    <p style="font-size: 45px;">게잼(gajam) 위대한 유니티 유튜버</p>
+                    <p style="font-size: 20px;margin-top:3%;">게잼은 주로 유니티 영상을 올리는 유튜버입니다.<br>그가 영상을 자주 올리는 편은 아니지만,<br>앞으로 성장가능성이 충분하고 매우 거대한 커뮤니티를 소유하고 있습니다.<br> 우리는 그의 밑에서 유니티를 모두가 이용할 수 있도록 하는것이 목표입니다.</p>
+                    <div style="margin-top: 5%;font-size: 40px;color: red;">
+                        <script>
+                            function getRandomArbitrary(min, max) {
+                                min = Math.ceil(min);
+                                max = Math.floor(max);
+                                return Math.floor(Math.random() * (max - min)) + min;
+                            }
+                            var mans = getRandomArbitrary(1124221, 1348882)
+                            document.write(mans)
+                        </script>
+                        명의 공산주의자가 게잼 영상을 시청중.
+                    </div>
+                    <div style="margin-top: 20%;font-size: 40px;text-align: center;">
+                        우리와 함께하기<br>
+                        <a href='https://youtube.com/channel/UCKZQlHJtAIqOSDREFOa0u7w'><img src="static/img/youtube.png" width="30%" alt="유튜브 방문하기"></a>
+                        <a href="https://discord.gg/avfXwE3g"><img width="30%" src="static/img/discord.png" alt="디스코드에 들어오기"></a>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </body>
+</html>
